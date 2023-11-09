@@ -2,6 +2,9 @@ package com.pigrafos.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigrafos.model.FinalResponse;
+import com.pigrafos.model.LabyrinthBFS;
+import com.pigrafos.model.LabyrinthDFS;
+import com.pigrafos.model.LabyrinthGraph;
 import com.pigrafos.model.LabyrinthResponse;
 
 import org.apache.http.HttpEntity;
@@ -145,7 +148,65 @@ public class LabyrinthClient {
         } else {
             throw new IOException("Erro na solicitação de movimento: Código de status " + statusCode);
         }
-
     }
 
+    public List<Integer> findShortestPathbfs(String user, String labyrinths) throws IOException {
+        List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
+
+        LabyrinthGraph graph = new LabyrinthGraph();
+        graph.buildGraph(responses);
+
+        LabyrinthBFS bfs = new LabyrinthBFS(graph);
+        int startVertex = responses.get(0).getActualPosition();
+        int endVertex = getEndVertex(responses);
+
+        List<Integer> path = bfs.findShortestPath(startVertex, endVertex);
+
+        int apiRequests = responses.size();
+
+        System.out.println("Número de requisições API para BFS: " + apiRequests);
+
+        return path;
+    }
+
+    public List<Integer> findShortestPathDFS(String user, String labyrinths) throws IOException {
+        List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
+
+        LabyrinthGraph graph = new LabyrinthGraph();
+        graph.buildGraph(responses);
+
+        LabyrinthDFS dfs = new LabyrinthDFS(graph);
+        int startVertex = responses.get(0).getActualPosition();
+        int endVertex = getEndVertex(responses);
+
+        List<Integer> path = dfs.findExitPath(startVertex, endVertex);
+
+        int apiRequests = responses.size();
+
+        System.out.println("Número de requisições API para bfs: " + apiRequests);
+
+        return path;
+    }
+
+    private List<LabyrinthResponse> getLabyrinthResponses(String user, String labyrinths) throws IOException {
+        List<String> labyrinthIds = verifyLabyrinths();
+        List<LabyrinthResponse> responses = new ArrayList<>();
+
+        for (String labyrinthId : labyrinthIds) {
+            LabyrinthResponse response = startExploration(user, labyrinthId);
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
+    private int getEndVertex(List<LabyrinthResponse> responses) {
+        for (LabyrinthResponse response : responses) {
+            if (response.isFinal()) {
+                return response.getActualPosition();
+            }
+        }
+
+        throw new IllegalStateException("Labirinto não possui uma posição final.");
+    }
 }
