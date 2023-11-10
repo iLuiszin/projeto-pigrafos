@@ -22,6 +22,7 @@ public class LabyrinthDFS {
 
     public List<Integer> findPath(int start) throws IOException {
         List<Integer> path = new ArrayList<>();
+        labyrinthGraph.markVisited(start);
         dfs(start, path);
         return path.isEmpty() ? null : path;
     }

@@ -34,6 +34,8 @@ public class Solver {
         LabyrinthResponse response = labyrinthClient.startExploration(user, lab);
         LabyrinthDFS labyrinthDFS = new LabyrinthDFS(labyrinthGraph, labyrinthClient, user, lab);
 
+        labyrinthGraph.buildGraph(List.of(response));
+
         List<Integer> path = labyrinthDFS.findPath(response.getActualPosition());
 
         if (path != null) {
