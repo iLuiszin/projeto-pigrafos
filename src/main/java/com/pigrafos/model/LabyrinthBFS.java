@@ -26,25 +26,44 @@ public class LabyrinthBFS {
     }
 
     private void bfs(int start, List<Integer> path) throws IOException {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
+        Queue<Pair<Integer, List<Integer>>> queue = new LinkedList<>();
+        List<Integer> rootNeighbors = new ArrayList<>(labyrinthGraph.getNeighbors(start));
+        queue.add(new Pair<>(start, rootNeighbors));
 
         while (!queue.isEmpty()) {
-            int vertex = queue.poll();
+            Pair<Integer, List<Integer>> pair = queue.poll();
+            int vertex = pair.getFirst();
+            List<Integer> neighbors = pair.getSecond();
+
             System.out.println("BFS Vertex: " + vertex);
             path.add(vertex);
 
             labyrinthGraph.markVisited(vertex);
 
-            List<Integer> neighbors = new ArrayList<>(labyrinthGraph.getNeighbors(vertex));
-
             for (int neighbor : neighbors) {
-                if (!labyrinthGraph.isVisited(neighbor)) {
-                    LabyrinthResponse moveResponse = labyrinthClient.move(user, lab, neighbor);
-                    labyrinthGraph.buildGraph(List.of(moveResponse));
-                    queue.add(neighbor);
-                }
+                LabyrinthResponse moveResponse = labyrinthClient.move(user, lab, neighbor);
+                labyrinthGraph.buildGraph(List.of(moveResponse));
+                queue.add(new Pair<>(neighbor, new ArrayList<>(labyrinthGraph.getNeighbors(neighbor))));
+                labyrinthClient.move(user, lab, vertex);
             }
+        }
+    }
+
+    private static class Pair<T, U> {
+        private final T first;
+        private final U second;
+
+        public Pair(T first, U second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public T getFirst() {
+            return first;
+        }
+
+        public U getSecond() {
+            return second;
         }
     }
 }

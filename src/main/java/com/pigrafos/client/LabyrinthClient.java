@@ -35,8 +35,8 @@ public class LabyrinthClient {
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
         httpClient = HttpClients.custom()
-        .setSSLContext(sslContext)
-        .build();
+                .setSSLContext(sslContext)
+                .build();
     }
 
     private static class InsecureTrustManager implements X509TrustManager {
@@ -112,6 +112,7 @@ public class LabyrinthClient {
         if (statusCode == 200) {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
+            System.out.println("Response: " + responseBody);
 
             return objectMapper.readValue(responseBody, LabyrinthResponse.class);
         } else {

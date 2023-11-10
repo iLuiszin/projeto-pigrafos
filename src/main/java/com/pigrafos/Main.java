@@ -1,11 +1,11 @@
 package com.pigrafos;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 import com.pigrafos.client.LabyrinthClient;
 import com.pigrafos.model.FinalResponse;
 import com.pigrafos.service.Solver;
-
 
 public class Main {
 
