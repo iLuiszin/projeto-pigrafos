@@ -9,7 +9,6 @@ import com.pigrafos.model.LabyrinthResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -39,8 +39,8 @@ public class LabyrinthClient {
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
         httpClient = HttpClients.custom()
-                .setSslcontext(sslContext)
-                .build();
+        .setSSLContext(sslContext)
+        .build();
     }
 
     private static class InsecureTrustManager implements X509TrustManager {
@@ -69,7 +69,7 @@ public class LabyrinthClient {
             String responseBody = EntityUtils.toString(entity);
             String[] labyrinths = objectMapper.readValue(responseBody, String[].class);
 
-            return Arrays.stream(labyrinths).toList();
+            return Arrays.stream(labyrinths).collect(Collectors.toList());
         } else {
             throw new IOException("Erro na solicitação: Código de status " + statusCode);
         }
@@ -149,7 +149,7 @@ public class LabyrinthClient {
         }
     }
 
-    public List<Integer> findShortestPathbfs(String user, String labyrinths) throws IOException {
+    public List<Integer> findShortestPathBFS(String user, String labyrinths) throws IOException {
         List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
 
         LabyrinthGraph graph = new LabyrinthGraph();
