@@ -30,12 +30,13 @@ public class LabyrinthDFS {
     private void dfs(int vertex, List<Integer> path) throws IOException {
         System.out.println(path);
         System.out.println(vertex);
-
+    
         path.add(vertex);
-
+    
         labyrinthGraph.markVisited(vertex);
-
-        List<Integer> neighbors = labyrinthGraph.getNeighbors(vertex);
+    
+        List<Integer> neighbors = new ArrayList<>(labyrinthGraph.getNeighbors(vertex));
+    
         for (int neighbor : neighbors) {
             if (!labyrinthGraph.isVisited(neighbor)) {
                 LabyrinthResponse moveResponse = labyrinthClient.move(user, lab, neighbor);

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.pigrafos.client.LabyrinthClient;
 import com.pigrafos.model.FinalResponse;
+import com.pigrafos.model.LabyrinthBFS;
 import com.pigrafos.model.LabyrinthDFS;
 import com.pigrafos.model.LabyrinthGraph;
 import com.pigrafos.model.LabyrinthResponse;
@@ -45,6 +46,25 @@ public class Solver {
             return pathValidator(user, lab, movements);
         } else {
             System.out.println("No path found.");
+            return new FinalResponse(false, 0);
+        }
+    }
+
+    public FinalResponse bfs(String user, String lab) throws IOException {
+        LabyrinthResponse response = labyrinthClient.startExploration(user, lab);
+        LabyrinthBFS labyrinthBFS = new LabyrinthBFS(labyrinthGraph, labyrinthClient, user, lab);
+    
+        labyrinthGraph.buildGraph(List.of(response));
+
+        List<Integer> path = labyrinthBFS.findPath(response.getActualPosition());
+
+        if (path != null) {
+            System.out.println("BFS Path found: " + path);
+            List<Integer> movements = convertPathToMovements(path);
+
+            return pathValidator(user, lab, movements);
+        } else {
+            System.out.println("No BFS path found.");
             return new FinalResponse(false, 0);
         }
     }

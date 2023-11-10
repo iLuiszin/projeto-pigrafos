@@ -24,7 +24,7 @@ public class Main {
         try {
             String user = "luis";
             String labyrinth = solver.getLabyrinth();
-            FinalResponse finalResponse = solver.dfs(user, labyrinth);
+            FinalResponse finalResponse = solver.bfs(user, labyrinth);
 
             System.out.println("Final Response: " + finalResponse);
 

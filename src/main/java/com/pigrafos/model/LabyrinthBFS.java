@@ -1,53 +1,50 @@
 package com.pigrafos.model;
 
+import java.io.IOException;
 import java.util.*;
 
-public class LabyrinthBFS {
-    private LabyrinthGraph graph;
-    private Map<Integer, Integer> parentMap;
+import com.pigrafos.client.LabyrinthClient;
 
-    public LabyrinthBFS(LabyrinthGraph graph) {
-        this.graph = graph;
-        this.parentMap = new HashMap<>();
+public class LabyrinthBFS {
+    private LabyrinthGraph labyrinthGraph;
+    private LabyrinthClient labyrinthClient;
+    private String user;
+    private String lab;
+
+    public LabyrinthBFS(LabyrinthGraph labyrinthGraph, LabyrinthClient labyrinthClient, String user, String lab) {
+        this.labyrinthGraph = labyrinthGraph;
+        this.labyrinthClient = labyrinthClient;
+        this.user = user;
+        this.lab = lab;
     }
 
-    public List<Integer> findShortestPath(int startVertex, int endVertex) {
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
+    public List<Integer> findPath(int start) throws IOException {
+        List<Integer> path = new ArrayList<>();
+        labyrinthGraph.markVisited(start);
+        bfs(start, path);
+        return path.isEmpty() ? null : path;
+    }
 
-        queue.add(startVertex);
-        visited.add(startVertex);
-        parentMap.put(startVertex, null);
+    private void bfs(int start, List<Integer> path) throws IOException {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
 
         while (!queue.isEmpty()) {
-            int currentVertex = queue.poll();
+            int vertex = queue.poll();
+            System.out.println("BFS Vertex: " + vertex);
+            path.add(vertex);
 
-            if (currentVertex == endVertex) {
-                return constructPath(endVertex);
-            }
+            labyrinthGraph.markVisited(vertex);
 
-            for (int neighbor : graph.getNeighbors(currentVertex)) {
-                if (!visited.contains(neighbor)) {
+            List<Integer> neighbors = new ArrayList<>(labyrinthGraph.getNeighbors(vertex));
+
+            for (int neighbor : neighbors) {
+                if (!labyrinthGraph.isVisited(neighbor)) {
+                    LabyrinthResponse moveResponse = labyrinthClient.move(user, lab, neighbor);
+                    labyrinthGraph.buildGraph(List.of(moveResponse));
                     queue.add(neighbor);
-                    visited.add(neighbor);
-                    parentMap.put(neighbor, currentVertex);
                 }
             }
         }
-
-        return Collections.emptyList();
-    }
-
-    private List<Integer> constructPath(int endVertex) {
-        List<Integer> path = new ArrayList<>();
-        Integer currentVertex = endVertex;
-
-        while (currentVertex != null) {
-            path.add(currentVertex);
-            currentVertex = parentMap.get(currentVertex);
-        }
-
-        Collections.reverse(path);
-        return path;
     }
 }
