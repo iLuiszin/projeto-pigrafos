@@ -66,7 +66,6 @@ public class Solver {
     public LabyrinthGraph createGraph(String user, String lab) throws IOException {
         LabyrinthResponse response = labyrinthClient.startExploration(user, lab);
         return dfs(user, lab, response);
-
     }
 
     public List<Integer> bfs(int start, int end) {
