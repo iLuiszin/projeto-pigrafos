@@ -13,12 +13,10 @@ import com.pigrafos.model.LabyrinthResponse;
 public class Solver {
     private LabyrinthClient labyrinthClient;
     private LabyrinthGraph labyrinthGraph;
-    private LabyrinthDFS labyrinthDFS;
 
     public Solver(LabyrinthClient labyrinthClient) {
         this.labyrinthClient = labyrinthClient;
         this.labyrinthGraph = new LabyrinthGraph();
-        this.labyrinthDFS = new LabyrinthDFS(labyrinthGraph);
     }
 
     public String getLabyrinth() throws IOException {
@@ -32,8 +30,9 @@ public class Solver {
         return labyrinthClient.pathValidator(user, lab, moves);
     }
 
-    public FinalResponse dfs(String user, String labyrinth) throws IOException {
-        LabyrinthResponse response = labyrinthClient.startExploration(user, labyrinth);
+    public FinalResponse dfs(String user, String lab) throws IOException {
+        LabyrinthResponse response = labyrinthClient.startExploration(user, lab);
+        LabyrinthDFS labyrinthDFS = new LabyrinthDFS(labyrinthGraph, labyrinthClient, user, lab);
 
         List<Integer> path = labyrinthDFS.findPath(response.getActualPosition());
 
@@ -41,7 +40,7 @@ public class Solver {
             System.out.println("Path found: " + path);
             List<Integer> movements = convertPathToMovements(path);
 
-            return pathValidator(user, labyrinth, movements);
+            return pathValidator(user, lab, movements);
         } else {
             System.out.println("No path found.");
             return new FinalResponse(false, 0);

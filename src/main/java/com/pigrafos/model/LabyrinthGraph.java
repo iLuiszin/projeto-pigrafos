@@ -8,10 +8,12 @@ import java.util.Map;
 public class LabyrinthGraph {
     private Map<Integer, List<Integer>> adjacencyList;
     private Map<Integer, TypeVertex> typeVertex;
+    private Map<Integer, Boolean> visitedVertices;
 
     public LabyrinthGraph() {
         this.adjacencyList = new HashMap<>();
         this.typeVertex = new HashMap<>();
+        this.visitedVertices = new HashMap<>();
     }
 
     public Map<Integer, TypeVertex> getTypeVertex() {
@@ -24,6 +26,7 @@ public class LabyrinthGraph {
 
     public void addVertex(int vertex) {
         adjacencyList.put(vertex, new ArrayList<>());
+        visitedVertices.put(vertex, false);
     }
 
     public void addEdge(int source, int destination) {
@@ -37,6 +40,14 @@ public class LabyrinthGraph {
 
     public Map<Integer, List<Integer>> getAdjacencyList() {
         return adjacencyList;
+    }
+
+    public boolean isVisited(int vertex) {
+        return visitedVertices.get(vertex);
+    }
+
+    public void markVisited(int vertex) {
+        visitedVertices.put(vertex, true);
     }
 
     public void buildGraph(List<LabyrinthResponse> responses) {
