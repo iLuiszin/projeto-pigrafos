@@ -1,16 +1,19 @@
 package com.pigrafos.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
-public class LabyrinthGraph {
+public class Graph {
     private Map<Integer, List<Integer>> adjacencyList;
     private Map<Integer, TypeVertex> typeVertex;
     private Map<Integer, Boolean> visitedVertices;
 
-    public LabyrinthGraph() {
+    public Graph() {
         this.adjacencyList = new HashMap<>();
         this.typeVertex = new HashMap<>();
         this.visitedVertices = new HashMap<>();
@@ -50,8 +53,8 @@ public class LabyrinthGraph {
         visitedVertices.put(vertex, true);
     }
 
-    public void buildGraph(List<LabyrinthResponse> responses) {
-        for (LabyrinthResponse response : responses) {
+    public void buildGraph(List<Response> responses) {
+        for (Response response : responses) {
             int currentPosition = response.getActualPosition();
             List<Integer> possibleMoves = response.getMoves();
 
@@ -66,5 +69,43 @@ public class LabyrinthGraph {
                 addEdge(currentPosition, newPosition);
             }
         }
+    }
+    public List<Integer> getPath(int source, int destination) {
+        List<Integer> path = new ArrayList<>();
+        if (!visitedVertices.containsKey(destination)) {
+            return path;
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        Map<Integer, Integer> parent = new HashMap<>();
+
+        queue.add(source);
+        visitedVertices.put(source, true);
+        parent.put(source, null);
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+
+            if (current == destination) {
+                int node = current;
+                while (node != source) {
+                    path.add(node);
+                    node = parent.get(node);
+                }
+                path.add(source);
+                Collections.reverse(path);
+                break;
+            }
+
+            for (int neighbor : adjacencyList.getOrDefault(current, Collections.emptyList())) {
+                if (!visitedVertices.getOrDefault(neighbor, false)) {
+                    visitedVertices.put(neighbor, true);
+                    parent.put(neighbor, current);
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        return path;
     }
 }

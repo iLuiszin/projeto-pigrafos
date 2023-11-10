@@ -2,9 +2,9 @@ package com.pigrafos;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
-import com.pigrafos.client.LabyrinthClient;
-import com.pigrafos.model.FinalResponse;
+import com.pigrafos.client.Client;
 import com.pigrafos.service.Solver;
 
 public class Main {
@@ -13,28 +13,29 @@ public class Main {
 
         Solver solver = null;
         try {
-            solver = new Solver(new LabyrinthClient());
+            solver = new Solver(new Client());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
             return;
         }
 
-        long startTime = System.currentTimeMillis();
-
+        long inicioTempoBfs = System.currentTimeMillis();
         try {
-            String user = "luis";
-            String labyrinth = solver.getLabyrinth();
-            FinalResponse finalResponse = solver.bfs(user, labyrinth);
+            String user = "Grupo L";
+            String labyrinth = solver.getRandomLabyrinth();
 
-            System.out.println("Final Response: " + finalResponse);
+            System.out.println(labyrinth);
 
+            List<Integer> shortestPath = solver.bfs(user, labyrinth);
+
+            System.out.println(shortestPath);
+            System.out.println(solver.validatePath(user, labyrinth, shortestPath));
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
+        long fimTempoBfs = System.currentTimeMillis();
+        long execucaoTempoBfs = fimTempoBfs - inicioTempoBfs;
 
-        long endTime = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println("Total time: " + totalTime + "ms");
+        System.out.println("Tempo de execução bfs: " + execucaoTempoBfs + " ms");
     }
 }

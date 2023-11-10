@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pigrafos.client.LabyrinthClient;
+import com.pigrafos.client.Client;
 
 
-public class LabyrinthDFS {
-    private LabyrinthGraph labyrinthGraph;
-    private LabyrinthClient labyrinthClient;
+public class DFS {
+    private Graph labyrinthGraph;
+    private Client labyrinthClient;
     private String user;
     private String lab;
 
-    public LabyrinthDFS(LabyrinthGraph labyrinthGraph, LabyrinthClient labyrinthClient, String user, String lab) {
+    public DFS(Graph labyrinthGraph, Client labyrinthClient, String user, String lab) {
         this.labyrinthGraph = labyrinthGraph;
         this.labyrinthClient = labyrinthClient;
         this.user = user;
@@ -39,7 +39,7 @@ public class LabyrinthDFS {
     
         for (int neighbor : neighbors) {
             if (!labyrinthGraph.isVisited(neighbor)) {
-                LabyrinthResponse moveResponse = labyrinthClient.move(user, lab, neighbor);
+                Response moveResponse = labyrinthClient.move(user, lab, neighbor);
                 labyrinthGraph.buildGraph(List.of(moveResponse));
                 dfs(neighbor, path);
             }

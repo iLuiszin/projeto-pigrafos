@@ -2,7 +2,7 @@ package com.pigrafos.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigrafos.model.FinalResponse;
-import com.pigrafos.model.LabyrinthResponse;
+import com.pigrafos.model.Response;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,11 +26,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.KeyManagementException;
 import java.security.cert.X509Certificate;
 
-public class LabyrinthClient {
+public class Client {
     private final CloseableHttpClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public LabyrinthClient() throws NoSuchAlgorithmException, KeyManagementException {
+    public Client() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
@@ -71,7 +71,7 @@ public class LabyrinthClient {
         }
     }
 
-    public LabyrinthResponse startExploration(String user, String labyrinths) throws IOException {
+    public Response startExploration(String user, String labyrinths) throws IOException {
         String url = "https://gtm.delary.dev/iniciar";
         HttpPost request = new HttpPost(url);
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\"}";
@@ -88,13 +88,13 @@ public class LabyrinthClient {
         if (statusCode == 200) {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
-            return objectMapper.readValue(responseBody, LabyrinthResponse.class);
+            return objectMapper.readValue(responseBody, Response.class);
         } else {
             throw new IOException("Erro na solicitação de exploração: Código de status " + statusCode);
         }
     }
 
-    public LabyrinthResponse move(String user, String labyrinths, int newPosition) throws IOException {
+    public Response move(String user, String labyrinths, int newPosition) throws IOException {
         String url = "https://gtm.delary.dev/movimentar";
         HttpPost request = new HttpPost(url);
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\",\"nova_posicao\":" + newPosition
@@ -114,7 +114,7 @@ public class LabyrinthClient {
             String responseBody = EntityUtils.toString(entity);
             System.out.println("Response: " + responseBody);
 
-            return objectMapper.readValue(responseBody, LabyrinthResponse.class);
+            return objectMapper.readValue(responseBody, Response.class);
         } else {
             throw new IOException("Erro na solicitação de movimento: Código de status " + statusCode);
         }

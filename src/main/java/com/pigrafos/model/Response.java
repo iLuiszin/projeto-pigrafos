@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class LabyrinthResponse {
+public class Response {
     @JsonProperty("pos_atual")
     private int actualPosition;
     @JsonProperty("inicio")
@@ -38,5 +38,9 @@ public class LabyrinthResponse {
                 ", end=" + end +
                 ", possibleMoves=" + possibleMoves +
                 '}';
+    }
+
+    public boolean isInicio() {
+        return false;
     }
 }
