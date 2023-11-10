@@ -1,28 +1,56 @@
 package com.pigrafos;
-
-import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.pigrafos.client.LabyrinthClient;
+import com.pigrafos.model.TypeVertex;
+import com.pigrafos.service.Solver;
 
 public class Main {
-    public static void main(String[] args) throws KeyManagementException, NoSuchAlgorithmException {
+
+    public static void main(String[] args) {
+
+        Solver solver = null;
         try {
-            LabyrinthClient client = new LabyrinthClient();
-
-            String user = "Grupo L";
-            String labyrinths = "Labirinto";
-
-            List<Integer> shortestPath = client.findShortestPathBFS(user, labyrinths);
-            System.out.println("Shortest Path: " + shortestPath);
-
-            List<Integer> exitPath = client.findShortestPathDFS(user, labyrinths);
-            System.out.println("Exit Path: " + exitPath);
-            
-        } catch (IOException e) {
+            solver = new Solver(new LabyrinthClient());
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
+            return;
         }
+
+        List<String> labyrinthsList;
+        long startTime = System.currentTimeMillis();
+
+        try {
+            String labyrinth = solver.getLabyrinth();
+            String user = "luis";
+
+            solver.createGraph(user, labyrinth);
+            Map<Integer, List<Integer>> adjacencyList = solver.createGraph(user, labyrinth).getAdjacencyList();
+            AtomicReference<Integer> start = new AtomicReference<>();
+            AtomicReference<Integer> end = new AtomicReference<>();
+
+            typeVertex.forEach((key, value) -> {
+                if (value.equals(TypeVertex.valueOf("INICIO"))) {
+                    start.set(key);
+                } else if (value.equals(TypeVertex.valueOf("FIM"))) {
+                    end.set(key);
+                }
+            });
+
+            System.out.println(solver.pathValidator(user, labyrinth, solver.bfs(start.get(), end.get())));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        long endTime = System.currentTimeMillis();
+        long tempoTotal = endTime - startTime;
+        System.out.println("Tempo total: " + tempoTotal + "ms");
+
     }
+
 }

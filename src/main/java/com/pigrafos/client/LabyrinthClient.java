@@ -35,7 +35,6 @@ public class LabyrinthClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public LabyrinthClient() throws NoSuchAlgorithmException, KeyManagementException {
-        // SSLContext personalizado
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
@@ -58,7 +57,7 @@ public class LabyrinthClient {
         }
     }
 
-    public List<String> verifyLabyrinths() throws IOException {
+    public List<String> checkLabyrinths() throws IOException {
         String url = "https://gtm.delary.dev/labirintos";
         HttpGet request = new HttpGet(url);
 
@@ -124,7 +123,7 @@ public class LabyrinthClient {
         }
     }
 
-    public FinalResponse validatePath(String user, String labyrinths, List<Integer> todosMovimentos)
+    public FinalResponse pathValidator(String user, String labyrinths, List<Integer> todosMovimentos)
             throws IOException {
         String url = "https://gtm.delary.dev/validar_caminho";
         HttpPost request = new HttpPost(url);
@@ -169,27 +168,28 @@ public class LabyrinthClient {
         return path;
     }
 
-    public List<Integer> findShortestPathDFS(String user, String labyrinths) throws IOException {
-        List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
+    // public List<Integer> findShortestPathDFS(String user, String labyrinths)
+    // throws IOException {
+    // List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
 
-        LabyrinthGraph graph = new LabyrinthGraph();
-        graph.buildGraph(responses);
+    // LabyrinthGraph graph = new LabyrinthGraph();
+    // graph.buildGraph(responses);
 
-        LabyrinthDFS dfs = new LabyrinthDFS(graph);
-        int startVertex = responses.get(0).getActualPosition();
-        int endVertex = getEndVertex(responses);
+    // LabyrinthDFS dfs = new LabyrinthDFS(graph);
+    // int startVertex = responses.get(0).getActualPosition();
+    // int endVertex = getEndVertex(responses);
 
-        List<Integer> path = dfs.findExitPath(startVertex, endVertex);
+    // List<Integer> path = dfs.findExitPath(startVertex, endVertex);
 
-        int apiRequests = responses.size();
+    // int apiRequests = responses.size();
 
-        System.out.println("Número de requisições API para bfs: " + apiRequests);
+    // System.out.println("Número de requisições API para bfs: " + apiRequests);
 
-        return path;
-    }
+    // return path;
+    // }
 
     private List<LabyrinthResponse> getLabyrinthResponses(String user, String labyrinths) throws IOException {
-        List<String> labyrinthIds = verifyLabyrinths();
+        List<String> labyrinthIds = checkLabyrinths();
         List<LabyrinthResponse> responses = new ArrayList<>();
 
         for (String labyrinthId : labyrinthIds) {
