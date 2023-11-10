@@ -7,19 +7,19 @@ import java.util.Map;
 
 public class LabyrinthGraph {
     private Map<Integer, List<Integer>> adjacencyList;
-    private Map<Integer, VertexType> vertexTypes;
+    private Map<Integer, TypeVertex> typeVertex;
 
     public LabyrinthGraph() {
         this.adjacencyList = new HashMap<>();
-        this.vertexTypes = new HashMap<>();
+        this.typeVertex = new HashMap<>();
     }
 
-    public Map<Integer, VertexType> getVertexTypes() {
-        return vertexTypes;
+    public Map<Integer, TypeVertex> getTypeVertex() {
+        return typeVertex;
     }
 
-    public void setVertexType(int vertex, VertexType type) {
-        vertexTypes.put(vertex, type);
+    public void setTypeVertex(int vertex, TypeVertex type) {
+        typeVertex.put(vertex, type);
     }
 
     public void addVertex(int vertex) {
@@ -42,7 +42,7 @@ public class LabyrinthGraph {
     public void buildGraph(List<LabyrinthResponse> responses) {
         for (LabyrinthResponse response : responses) {
             int currentPosition = response.getActualPosition();
-            List<Integer> possibleMoves = response.getMovimentos();
+            List<Integer> possibleMoves = response.getMoves();
 
             if (!adjacencyList.containsKey(currentPosition)) {
                 addVertex(currentPosition);

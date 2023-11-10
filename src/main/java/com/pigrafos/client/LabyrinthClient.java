@@ -35,7 +35,6 @@ public class LabyrinthClient {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public LabyrinthClient() throws NoSuchAlgorithmException, KeyManagementException {
-        // SSLContext personalizado
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
@@ -58,7 +57,7 @@ public class LabyrinthClient {
         }
     }
 
-    public List<String> verifyLabyrinths() throws IOException {
+    public List<String> checkLabyrinths() throws IOException {
         String url = "https://gtm.delary.dev/labirintos";
         HttpGet request = new HttpGet(url);
 
@@ -124,7 +123,7 @@ public class LabyrinthClient {
         }
     }
 
-    public FinalResponse validatePath(String user, String labyrinths, List<Integer> todosMovimentos)
+    public FinalResponse pathValidator(String user, String labyrinths, List<Integer> todosMovimentos)
             throws IOException {
         String url = "https://gtm.delary.dev/validar_caminho";
         HttpPost request = new HttpPost(url);
@@ -189,7 +188,7 @@ public class LabyrinthClient {
     }
 
     private List<LabyrinthResponse> getLabyrinthResponses(String user, String labyrinths) throws IOException {
-        List<String> labyrinthIds = verifyLabyrinths();
+        List<String> labyrinthIds = checkLabyrinths();
         List<LabyrinthResponse> responses = new ArrayList<>();
 
         for (String labyrinthId : labyrinthIds) {

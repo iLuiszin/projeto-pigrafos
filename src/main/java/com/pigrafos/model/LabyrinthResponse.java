@@ -18,7 +18,7 @@ public class LabyrinthResponse {
         return actualPosition;
     }
 
-    public boolean isInicio() {
+    public boolean isBegin() {
         return start;
     }
 
@@ -26,7 +26,7 @@ public class LabyrinthResponse {
         return end;
     }
 
-    public List<Integer> getMovimentos() {
+    public List<Integer> getMoves() {
         return possibleMoves;
     }
 
