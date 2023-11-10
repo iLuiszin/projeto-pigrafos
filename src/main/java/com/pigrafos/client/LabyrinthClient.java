@@ -168,24 +168,25 @@ public class LabyrinthClient {
         return path;
     }
 
-    public List<Integer> findShortestPathDFS(String user, String labyrinths) throws IOException {
-        List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
+    // public List<Integer> findShortestPathDFS(String user, String labyrinths)
+    // throws IOException {
+    // List<LabyrinthResponse> responses = getLabyrinthResponses(user, labyrinths);
 
-        LabyrinthGraph graph = new LabyrinthGraph();
-        graph.buildGraph(responses);
+    // LabyrinthGraph graph = new LabyrinthGraph();
+    // graph.buildGraph(responses);
 
-        LabyrinthDFS dfs = new LabyrinthDFS(graph);
-        int startVertex = responses.get(0).getActualPosition();
-        int endVertex = getEndVertex(responses);
+    // LabyrinthDFS dfs = new LabyrinthDFS(graph);
+    // int startVertex = responses.get(0).getActualPosition();
+    // int endVertex = getEndVertex(responses);
 
-        List<Integer> path = dfs.findExitPath(startVertex, endVertex);
+    // List<Integer> path = dfs.findExitPath(startVertex, endVertex);
 
-        int apiRequests = responses.size();
+    // int apiRequests = responses.size();
 
-        System.out.println("Número de requisições API para bfs: " + apiRequests);
+    // System.out.println("Número de requisições API para bfs: " + apiRequests);
 
-        return path;
-    }
+    // return path;
+    // }
 
     private List<LabyrinthResponse> getLabyrinthResponses(String user, String labyrinths) throws IOException {
         List<String> labyrinthIds = checkLabyrinths();

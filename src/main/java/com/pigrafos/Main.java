@@ -42,7 +42,6 @@ public class Main {
                 }
             });
 
-            System.out.println(solver.bfs(start.get(), end.get()));
             System.out.println(solver.pathValidator(user, labyrinth, solver.bfs(start.get(), end.get())));
         } catch (Exception e) {
             e.printStackTrace();

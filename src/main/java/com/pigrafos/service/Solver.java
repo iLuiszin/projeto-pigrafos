@@ -10,6 +10,7 @@ import java.util.Stack;
 import com.pigrafos.client.LabyrinthClient;
 import com.pigrafos.model.FinalResponse;
 import com.pigrafos.model.LabyrinthBFS;
+import com.pigrafos.model.LabyrinthDFS;
 import com.pigrafos.model.LabyrinthGraph;
 import com.pigrafos.model.LabyrinthResponse;
 import com.pigrafos.model.TypeVertex;
@@ -17,14 +18,14 @@ import com.pigrafos.model.TypeVertex;
 public class Solver {
     private LabyrinthClient labyrinthClient;
     private LabyrinthGraph labyrinthGraph;
-    private Stack<LabyrinthResponse> labyrinthStack;
+    private Stack<LabyrinthResponse> path;
     private Set<Integer> visited;
 
     public Solver(LabyrinthClient labyrinthClient) {
         this.labyrinthClient = labyrinthClient;
         this.labyrinthGraph = new LabyrinthGraph();
         this.visited = new HashSet<>();
-        this.labyrinthStack = new Stack<>();
+        this.path = new Stack<>();
     }
 
     public String getLabyrinth() throws IOException {
@@ -45,7 +46,7 @@ public class Solver {
             labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.CAMINHO);
         }
 
-        labyrinthStack.push(position);
+        path.push(position);
 
         for (int move : position.getMoves()) {
             if (!visited.contains(move)) {
@@ -54,23 +55,34 @@ public class Solver {
             }
         }
 
-        labyrinthStack.pop();
+        path.pop();
 
-        if (labyrinthStack.size() - 1 >= 0) {
-            labyrinthClient.move(user, lab, labyrinthStack.get(labyrinthStack.size() - 1).getActualPosition());
+        if (path.size() - 1 >= 0) {
+            labyrinthClient.move(user, lab, path.get(path.size() - 1).getActualPosition());
         }
 
     }
 
     public LabyrinthGraph createGraph(String user, String lab) throws IOException {
         LabyrinthResponse response = labyrinthClient.startExploration(user, lab);
-        navigate(user, lab, response);
-        return labyrinthGraph;
+        return dfs(user, lab, response);
+
     }
 
     public List<Integer> bfs(int start, int end) {
-        LabyrinthClient bfs = new LabyrinthClient();
-        return bfs.findShortestPathbfs(getLabyrinth(), getLabyrinth());
+        LabyrinthBFS bfs = new LabyrinthBFS(labyrinthGraph);
+        return bfs.findShortestPath(start, end);
+    }
+
+    public Stack<LabyrinthResponse> dfs(String user, String lab, LabyrinthResponse position) {
+        LabyrinthDFS dfs = new LabyrinthDFS();
+        try {
+            dfs.navigate(user, lab, position);
+        } catch (Exception e) {
+
+        }
+
+        return dfs.getShortestPath();
     }
 
     public FinalResponse pathValidator(String user, String lab, List<Integer> moves) throws IOException {
