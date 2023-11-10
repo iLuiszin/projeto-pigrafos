@@ -1,77 +1,41 @@
 package com.pigrafos.model;
 
-import java.io.IOException;
-import java.util.*;
-
-import com.pigrafos.client.LabyrinthClient;
+import java.util.List;
+import java.util.Stack;
 
 public class LabyrinthDFS {
-    private LabyrinthGraph labyrinthGraph;
-    private LabyrinthClient labyrinthClient;
-    private HashSet<Integer> visited;
-    private Stack<LabyrinthResponse> path;
-    private Stack<LabyrinthResponse> shortestPath;
 
-    public LabyrinthDFS() {
-        visited = new HashSet<>();
-        path = new Stack<>();
-        shortestPath = new Stack<>();
+    private LabyrinthGraph graph;
+
+    public LabyrinthDFS(LabyrinthGraph graph) {
+        this.graph = graph;
     }
 
-    public void navigate(String user, String lab, LabyrinthResponse position) throws IOException {
-        visited.add(position.getActualPosition());
+    public List<Integer> findPath(int startVertex) {
+        boolean[] visited = new boolean[graph.getAdjacencyList().size()];
+        Stack<Integer> stack = new Stack<>();
+        Stack<Integer> pathStack = new Stack<>();
 
-        if (position.isBegin()) {
-            labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.INICIO);
-        } else if (position.isFinal()) {
-            labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.FIM);
-            if (shortestPath.isEmpty() || path.size() < shortestPath.size()) {
-                shortestPath = new Stack<>();
-                shortestPath.addAll(path);
+        stack.push(startVertex);
+        visited[startVertex] = true;
+
+        while (!stack.isEmpty()) {
+            int currentVertex = stack.pop();
+            pathStack.push(currentVertex);
+
+            if (graph.getTypeVertex().get(currentVertex) == TypeVertex.FIM) {
+                return pathStack;
             }
-        } else {
-            labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.CAMINHO);
-        }
 
-        path.push(position);
-
-        for (int move : position.getMoves()) {
-            if (!visited.contains(move)) {
-                LabyrinthResponse response = labyrinthClient.move(user, lab, move);
-                navigate(user, lab, response);
+            List<Integer> neighbors = graph.getNeighbors(currentVertex);
+            for (int neighbor : neighbors) {
+                if (!visited[neighbor]) {
+                    stack.push(neighbor);
+                    visited[neighbor] = true;
+                }
             }
         }
 
-        path.pop();
-        visited.remove(position.getActualPosition());
-
-        if (!path.isEmpty()) {
-            labyrinthClient.move(user, lab, path.peek().getActualPosition());
-        }
+        return null; // No path found
     }
-
-    public Stack<LabyrinthResponse> getShortestPath() {
-        return shortestPath;
-    }
-
-    // public List<Integer> findExitPath(int startVertex, int endVertex) {
-    // List<Integer> path = new ArrayList<>();
-    // dfs(startVertex, endVertex, path);
-    // return path;
-    // }
-
-    // private void dfs(int currentVertex, int endVertex, List<Integer> path) {
-    // visited.add(currentVertex);
-    // path.add(currentVertex);
-
-    // if (currentVertex == endVertex) {
-    // return;
-    // }
-
-    // for (int neighbor : graph.getNeighbors(currentVertex)) {
-    // if (!visited.contains(neighbor)) {
-    // dfs(neighbor, endVertex, path);
-    // }
-    // }
-    // }
 }

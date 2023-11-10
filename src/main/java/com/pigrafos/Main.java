@@ -3,7 +3,9 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 import com.pigrafos.client.LabyrinthClient;
+import com.pigrafos.model.FinalResponse;
 import com.pigrafos.service.Solver;
+
 
 public class Main {
 
@@ -16,13 +18,15 @@ public class Main {
             e.printStackTrace();
             return;
         }
+
         long startTime = System.currentTimeMillis();
 
         try {
             String user = "luis";
             String labyrinth = solver.getLabyrinth();
+            FinalResponse finalResponse = solver.dfs(user, labyrinth);
 
-            System.out.println(solver.dfs(user, labyrinth));
+            System.out.println("Final Response: " + finalResponse);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,9 +34,7 @@ public class Main {
         }
 
         long endTime = System.currentTimeMillis();
-        long tempoTotal = endTime - startTime;
-        System.out.println("Tempo total: " + tempoTotal + "ms");
-
+        long totalTime = endTime - startTime;
+        System.out.println("Total time: " + totalTime + "ms");
     }
-
 }
