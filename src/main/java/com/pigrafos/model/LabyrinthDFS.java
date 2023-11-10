@@ -1,41 +1,35 @@
 package com.pigrafos.model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class LabyrinthDFS {
+    private LabyrinthGraph labyrinthGraph;
+    private boolean[] visited;
 
-    private LabyrinthGraph graph;
-
-    public LabyrinthDFS(LabyrinthGraph graph) {
-        this.graph = graph;
+    public LabyrinthDFS(LabyrinthGraph labyrinthGraph) {
+        this.labyrinthGraph = labyrinthGraph;
+        this.visited = new boolean[labyrinthGraph.getAdjacencyList().size()];
     }
 
-    public List<Integer> findPath(int startVertex) {
-        boolean[] visited = new boolean[graph.getAdjacencyList().size()];
-        Stack<Integer> stack = new Stack<>();
-        Stack<Integer> pathStack = new Stack<>();
+    public List<Integer> findPath(int start) {
+        List<Integer> path = new ArrayList<>();
+        dfs(start, path);
+        return path.isEmpty() ? null : path;
+    }
 
-        stack.push(startVertex);
-        visited[startVertex] = true;
+    private void dfs(int vertex, List<Integer> path) {
+        System.out.println(visited);
+        System.out.println(path);
+        System.out.println(vertex);
+        visited[vertex] = true;
+        path.add(vertex);
 
-        while (!stack.isEmpty()) {
-            int currentVertex = stack.pop();
-            pathStack.push(currentVertex);
-
-            if (graph.getTypeVertex().get(currentVertex) == TypeVertex.FIM) {
-                return pathStack;
-            }
-
-            List<Integer> neighbors = graph.getNeighbors(currentVertex);
-            for (int neighbor : neighbors) {
-                if (!visited[neighbor]) {
-                    stack.push(neighbor);
-                    visited[neighbor] = true;
-                }
+        List<Integer> neighbors = labyrinthGraph.getNeighbors(vertex);
+        for (int neighbor : neighbors) {
+            if (!visited[neighbor]) {
+                dfs(neighbor, path);
             }
         }
-
-        return null; // No path found
     }
 }
