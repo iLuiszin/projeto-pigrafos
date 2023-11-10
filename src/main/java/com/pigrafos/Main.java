@@ -1,12 +1,8 @@
 package com.pigrafos;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import com.pigrafos.client.LabyrinthClient;
-import com.pigrafos.model.TypeVertex;
 import com.pigrafos.service.Solver;
 
 public class Main {
@@ -20,28 +16,14 @@ public class Main {
             e.printStackTrace();
             return;
         }
-
-        List<String> labyrinthsList;
         long startTime = System.currentTimeMillis();
 
         try {
-            String labyrinth = solver.getLabyrinth();
             String user = "luis";
+            String labyrinth = solver.getLabyrinth();
 
-            solver.createGraph(user, labyrinth);
-            Map<Integer, List<Integer>> adjacencyList = solver.createGraph(user, labyrinth).getAdjacencyList();
-            AtomicReference<Integer> start = new AtomicReference<>();
-            AtomicReference<Integer> end = new AtomicReference<>();
+            System.out.println(solver.dfs(user, labyrinth));
 
-            typeVertex.forEach((key, value) -> {
-                if (value.equals(TypeVertex.valueOf("INICIO"))) {
-                    start.set(key);
-                } else if (value.equals(TypeVertex.valueOf("FIM"))) {
-                    end.set(key);
-                }
-            });
-
-            System.out.println(solver.pathValidator(user, labyrinth, solver.bfs(start.get(), end.get())));
         } catch (Exception e) {
             e.printStackTrace();
             return;
