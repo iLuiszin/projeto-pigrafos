@@ -29,7 +29,7 @@ public class Main {
             String labyrinth = solver.getLabyrinth();
             String user = "luis";
 
-            Map<Integer, TypeVertex> typeVertex = solver.createGraph(user, labyrinth).getTypeVertex();
+            solver.createGraph(user, labyrinth);
             Map<Integer, List<Integer>> adjacencyList = solver.createGraph(user, labyrinth).getAdjacencyList();
             AtomicReference<Integer> start = new AtomicReference<>();
             AtomicReference<Integer> end = new AtomicReference<>();

@@ -25,8 +25,6 @@ public class LabyrinthDFS {
             labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.INICIO);
         } else if (position.isFinal()) {
             labyrinthGraph.setTypeVertex(position.getActualPosition(), TypeVertex.FIM);
-            // Se chegamos ao final, verificamos se este caminho é mais curto que o
-            // atualmente armazenado
             if (shortestPath.isEmpty() || path.size() < shortestPath.size()) {
                 shortestPath = new Stack<>();
                 shortestPath.addAll(path);
