@@ -18,7 +18,7 @@ public class Response {
         return actualPosition;
     }
 
-    public boolean isBegin() {
+    public boolean isInicio() {
         return start;
     }
 
@@ -26,7 +26,7 @@ public class Response {
         return end;
     }
 
-    public List<Integer> getMoves() {
+    public List<Integer> getMovimentos() {
         return possibleMoves;
     }
 
@@ -38,9 +38,5 @@ public class Response {
                 ", end=" + end +
                 ", possibleMoves=" + possibleMoves +
                 '}';
-    }
-
-    public boolean isInicio() {
-        return false;
     }
 }

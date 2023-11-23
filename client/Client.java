@@ -3,9 +3,9 @@ package com.pigrafos.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigrafos.model.FinalResponse;
 import com.pigrafos.model.Response;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -15,9 +15,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -31,11 +31,14 @@ public class Client {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public Client() throws NoSuchAlgorithmException, KeyManagementException {
+        // SSLContext personalizado
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
+
+        // Configura HttpClientBuilder para usar o SSLContext personalizado
         httpClient = HttpClients.custom()
-                .setSSLContext(sslContext)
+                .setSslcontext(sslContext)
                 .build();
     }
 
@@ -53,7 +56,7 @@ public class Client {
         }
     }
 
-    public List<String> checkLabyrinths() throws IOException {
+    public List<String> verifyLabyrinths() throws IOException {
         String url = "https://gtm.delary.dev/labirintos";
         HttpGet request = new HttpGet(url);
 
@@ -65,7 +68,7 @@ public class Client {
             String responseBody = EntityUtils.toString(entity);
             String[] labyrinths = objectMapper.readValue(responseBody, String[].class);
 
-            return Arrays.stream(labyrinths).collect(Collectors.toList());
+            return Arrays.stream(labyrinths).toList();
         } else {
             throw new IOException("Erro na solicitação: Código de status " + statusCode);
         }
@@ -74,6 +77,7 @@ public class Client {
     public Response startExploration(String user, String labyrinths) throws IOException {
         String url = "https://gtm.delary.dev/iniciar";
         HttpPost request = new HttpPost(url);
+        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\"}";
 
         final StringEntity myEntity = new StringEntity(json);
@@ -97,6 +101,7 @@ public class Client {
     public Response move(String user, String labyrinths, int newPosition) throws IOException {
         String url = "https://gtm.delary.dev/movimentar";
         HttpPost request = new HttpPost(url);
+        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\",\"nova_posicao\":" + newPosition
                 + "}";
 
@@ -112,7 +117,6 @@ public class Client {
         if (statusCode == 200) {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
-            System.out.println("Response: " + responseBody);
 
             return objectMapper.readValue(responseBody, Response.class);
         } else {
@@ -120,10 +124,11 @@ public class Client {
         }
     }
 
-    public FinalResponse pathValidator(String user, String labyrinths, List<Integer> todosMovimentos)
+    public FinalResponse validatePath(String user, String labyrinths, List<Integer> todosMovimentos)
             throws IOException {
         String url = "https://gtm.delary.dev/validar_caminho";
         HttpPost request = new HttpPost(url);
+        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\",\"todos_movimentos\":"
                 + todosMovimentos + "}";
 
@@ -144,5 +149,7 @@ public class Client {
         } else {
             throw new IOException("Erro na solicitação de movimento: Código de status " + statusCode);
         }
+
     }
+
 }

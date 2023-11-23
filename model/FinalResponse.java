@@ -21,6 +21,7 @@ public class FinalResponse {
         return isValid;
     }
 
+
     public int getMoves() {
         return moves;
     }
