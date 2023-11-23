@@ -17,8 +17,11 @@ import java.util.List;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.KeyManagementException;
+import java.security.cert.X509Certificate;
 
 public class Client {
     private static final String BASE_URL = "https://gtm.delary.dev";
@@ -37,12 +40,26 @@ public class Client {
 
     public Client() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        TrustManager[] trustAllCertificates = new TrustManager[]{};
+        TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
 
         httpClient = HttpClients.custom()
                 .setSSLContext(sslContext)
                 .build();
+    }
+
+    private static class InsecureTrustManager implements X509TrustManager {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+
+        }
     }
 
     private HttpResponse executeRequest(HttpUriRequest request) throws IOException {
