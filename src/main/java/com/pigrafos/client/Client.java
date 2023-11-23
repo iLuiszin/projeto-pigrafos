@@ -5,7 +5,6 @@ import com.pigrafos.model.FinalResponse;
 import com.pigrafos.model.Response;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -13,7 +12,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,11 +37,11 @@ public class Client {
 
     public Client() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        TrustManager[] trustAllCertificates = new TrustManager[]{new InsecureTrustManager()};
+        TrustManager[] trustAllCertificates = new TrustManager[]{};
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
 
         httpClient = HttpClients.custom()
-                .setSslcontext(sslContext)
+                .setSSLContext(sslContext)
                 .build();
     }
 
@@ -74,7 +72,6 @@ public class Client {
     public Response apiStart(String user, String lab) throws IOException {
         String url = BASE_URL + START_PATH;
         HttpPost request = new HttpPost(url);
-        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\"}";
 
         final StringEntity myEntity = new StringEntity(json);
@@ -93,7 +90,6 @@ public class Client {
     public Response apiMove(String user, String lab, int newPosition) throws IOException {
         String url = BASE_URL + MOVE_PATH;
         HttpPost request = new HttpPost(url);
-        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\",\"nova_posicao\":" + newPosition
                 + "}";
 
@@ -115,7 +111,6 @@ public class Client {
             throws IOException {
         String url = BASE_URL + VALIDATE_PATH;
         HttpPost request = new HttpPost(url);
-        final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\",\"todos_movimentos\":"
                 + object + "}";
 

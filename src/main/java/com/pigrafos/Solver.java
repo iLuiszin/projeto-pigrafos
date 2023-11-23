@@ -69,7 +69,7 @@ public class Solver {
         }
     }
 
-    public void findShortestPath() {
+    public void findShortestPath() throws IOException {
         Map<Integer, Integer> distance = new HashMap<>();
         Map<Integer, Integer> parent = new HashMap<>();
         Queue<Integer> queue = new LinkedList<>();
@@ -106,7 +106,7 @@ public class Solver {
         Collections.reverse(shortestPath);
     
         System.out.println(shortestPath);
-        FinalResponse finalResponse = client.apiValided(user, lab, Collections.reverse(shortestPath));
+        FinalResponse finalResponse = client.apiValided(user, lab, shortestPath);
         System.out.println(finalResponse);
     }
 
