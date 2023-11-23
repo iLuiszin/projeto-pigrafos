@@ -18,10 +18,6 @@ public class Response {
         return actualPosition;
     }
 
-    public boolean isInicio() {
-        return start;
-    }
-
     public boolean isFinal() {
         return end;
     }

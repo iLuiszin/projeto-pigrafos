@@ -28,22 +28,17 @@ public class Solver {
         this.destination = 1;
     }
 
-    public String getRandomLabyrinth() throws IOException {
-        List<String> labyrinthList = client.checkLabs();
-
-        Random random = new Random();
-        int labyrinthNumber = random.nextInt(labyrinthList.size());
-        return labyrinthList.get(labyrinthNumber);
+    public List<String> listAvailableLabs() throws IOException {
+        return client.checkLabs();
     }
 
-    public Graph start(String user, String lab) throws IOException {
+    public void start(String user, String lab) throws IOException {
         Response starting = client.apiStart(user, lab);
         source = starting.getActualPosition();
         this.user = user;
         this.lab = lab;
 
         navigating(starting);
-        return graph;
     }
 
     private void navigating(Response currentPosition) throws IOException {
@@ -104,13 +99,10 @@ public class Solver {
 
         shortestPath.add(source);
         Collections.reverse(shortestPath);
-    
-        System.out.println(shortestPath);
         FinalResponse finalResponse = client.apiValided(user, lab, shortestPath);
-        System.out.println(finalResponse);
-    }
-
-    public FinalResponse validatePath(String user, String labyrinth, List<Integer> moves) throws IOException {
-        return client.apiValided(user, labyrinth, moves);
+    
+        System.out.println("Steps: " + finalResponse.getMoves());
+        System.out.println("Path: " + shortestPath);
+        System.out.println("IsValid: " + finalResponse.isValid());
     }
 }

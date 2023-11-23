@@ -2,6 +2,8 @@ import com.pigrafos.client.Client;
 import com.pigrafos.Solver;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Scanner;
 import java.security.KeyManagementException;
 
 public class Main {
@@ -16,12 +18,28 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
         try {
-            String user = "Grupo L";
-            String lab = solver.getRandomLabyrinth();
+            String user = "Group L";
+            List<String> availableLabs = solver.listAvailableLabs();
 
-            System.out.println(lab);
+            System.out.println("Available Labs:");
+            for (int i = 0; i < availableLabs.size(); i++) {
+                System.out.println((i + 1) + ". " + availableLabs.get(i));
+            }
 
-            solver.start(user, lab);
+            try (Scanner scanner = new Scanner(System.in)) {
+                System.out.print("Choose a labyrinth (1-" + availableLabs.size() + "): ");
+                int chosenLabIndex = scanner.nextInt();
+
+                if (chosenLabIndex < 1 || chosenLabIndex > availableLabs.size()) {
+                    System.out.println("Invalid index. Exiting...");
+                    return;
+                }
+                String lab = availableLabs.get(chosenLabIndex - 1);
+
+                System.out.println("Chosen lab: " + lab);
+
+                solver.start(user, lab);
+            }
             solver.findShortestPath();
 
         } catch (Exception e) {
@@ -30,6 +48,6 @@ public class Main {
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
 
-        System.out.println("Tempo de execução: " + elapsedTime + " ms");
+        System.out.println("Execution time: " + elapsedTime + " ms");
     }
 }

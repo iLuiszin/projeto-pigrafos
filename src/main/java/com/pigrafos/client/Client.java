@@ -40,7 +40,7 @@ public class Client {
 
     public Client() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
+        TrustManager[] trustAllCertificates = new TrustManager[]{new InsecureTrustManager()};
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
 
         httpClient = HttpClients.custom()
@@ -54,23 +54,30 @@ public class Client {
         }
 
         public void checkClientTrusted(X509Certificate[] certs, String authType) {
-
         }
 
         public void checkServerTrusted(X509Certificate[] certs, String authType) {
-
         }
     }
 
     private HttpResponse executeRequest(HttpUriRequest request) throws IOException {
-        CloseableHttpResponse httpResponse = httpClient.execute(request);
-
-        int statusCode = httpResponse.getStatusLine().getStatusCode();
-        if (statusCode == HTTP_OK) {
-            return httpResponse;
-        } else {
-            throw new IOException("Erro na solicitação: Código de status " + statusCode);
+        try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode == HTTP_OK) {
+                return httpResponse;
+            } else {
+                throw new IOException("Erro na solicitação: Código de status " + statusCode);
+            }
         }
+    }
+
+    private String getResponseBody(HttpResponse response) throws IOException {
+        HttpEntity entity = response.getEntity();
+        return EntityUtils.toString(entity);
+    }
+
+    private String buildJsonString(String user, String lab, String additionalParams) {
+        return String.format("{\"id\":\"%s\",\"labirinto\":\"%s\",%s}", user, lab, additionalParams);
     }
 
     public List<String> checkLabs() throws IOException {
@@ -78,70 +85,57 @@ public class Client {
         HttpGet request = new HttpGet(url);
 
         HttpResponse httpResponse = executeRequest(request);
+        String responseBody = getResponseBody(httpResponse);
 
-        HttpEntity entity = httpResponse.getEntity();
-        String responseBody = EntityUtils.toString(entity);
-        String[] lab = objectMapper.readValue(responseBody, String[].class);
-
-        return Arrays.asList(lab);
+        return Arrays.asList(objectMapper.readValue(responseBody, String[].class));
     }
 
     public Response apiStart(String user, String lab) throws IOException {
         String url = BASE_URL + START_PATH;
         HttpPost request = new HttpPost(url);
-        String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\"}";
+        String json = buildJsonString(user, lab, "");
 
-        final StringEntity myEntity = new StringEntity(json);
-
-        request.setEntity(myEntity);
+        request.setEntity(new StringEntity(json));
         request.setHeader("Content-type", CONTENT_TYPE_JSON);
         request.setHeader("Accept", ACCEPT_JSON);
 
         HttpResponse response = executeRequest(request);
+        String responseBody = getResponseBody(response);
 
-        HttpEntity entity = response.getEntity();
-        String responseBody = EntityUtils.toString(entity);
         return objectMapper.readValue(responseBody, Response.class);
     }
 
     public Response apiMove(String user, String lab, int newPosition) throws IOException {
         String url = BASE_URL + MOVE_PATH;
         HttpPost request = new HttpPost(url);
-        String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\",\"nova_posicao\":" + newPosition
-                + "}";
+        String json = buildJsonString(user, lab, "\"nova_posicao\":" + newPosition);
 
-        final StringEntity myEntity = new StringEntity(json);
-
-        request.setEntity(myEntity);
+        request.setEntity(new StringEntity(json));
         request.setHeader("Content-type", CONTENT_TYPE_JSON);
         request.setHeader("Accept", ACCEPT_JSON);
 
         HttpResponse response = executeRequest(request);
-
-        HttpEntity entity = response.getEntity();
-        String responseBody = EntityUtils.toString(entity);
+        String responseBody = getResponseBody(response);
 
         return objectMapper.readValue(responseBody, Response.class);
     }
 
-    public FinalResponse apiValided(String user, String lab, Object object)
-            throws IOException {
+    public FinalResponse apiValided(String user, String lab, Object object) throws IOException {
         String url = BASE_URL + VALIDATE_PATH;
         HttpPost request = new HttpPost(url);
-        String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + lab + "\",\"todos_movimentos\":"
-                + object + "}";
+        String json = buildJsonString(user, lab, "\"todos_movimentos\":" + object);
 
-        final StringEntity myEntity = new StringEntity(json);
-
-        request.setEntity(myEntity);
+        request.setEntity(new StringEntity(json));
         request.setHeader("Content-type", CONTENT_TYPE_JSON);
         request.setHeader("Accept", ACCEPT_JSON);
 
         HttpResponse response = executeRequest(request);
-
-        HttpEntity entity = response.getEntity();
-        String responseBody = EntityUtils.toString(entity);
+        String responseBody = getResponseBody(response);
 
         return objectMapper.readValue(responseBody, FinalResponse.class);
+    }
+
+    public void close() throws IOException {
+        httpClient.close();
     }
 }

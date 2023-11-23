@@ -23,7 +23,7 @@ public class FinalResponse {
 
 
     public int getMoves() {
-        return moves;
+        return moves - 1;
     }
 
     @Override
