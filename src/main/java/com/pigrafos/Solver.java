@@ -38,13 +38,13 @@ public class Solver {
         this.user = user;
         this.lab = lab;
 
-        navigating(starting);
+        dfs(starting);
     }
 
-    private void navigating(Response currentPosition) throws IOException {
+    private void dfs(Response currentPosition) throws IOException {
         visited.add(currentPosition.getActualPosition());
 
-        if(currentPosition.isFinal()){
+        if (currentPosition.isFinal()) {
             destination = currentPosition.getActualPosition();
         }
 
@@ -54,7 +54,7 @@ public class Solver {
         for (int newPosition : currentPosition.getMovimentos()) {
             if (!visited.contains(newPosition)) {
                 Response moveResponse = client.apiMove(user, lab, newPosition);
-                navigating(moveResponse);
+                dfs(moveResponse);
             }
         }
 
@@ -100,7 +100,7 @@ public class Solver {
         shortestPath.add(source);
         Collections.reverse(shortestPath);
         FinalResponse finalResponse = client.apiValided(user, lab, shortestPath);
-    
+
         System.out.println("Steps: " + finalResponse.getMoves());
         System.out.println("Path: " + shortestPath);
         System.out.println("IsValid: " + finalResponse.isValid());

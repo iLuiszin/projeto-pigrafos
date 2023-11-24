@@ -27,7 +27,7 @@ public class Main {
             }
 
             try (Scanner scanner = new Scanner(System.in)) {
-                System.out.print("Choose a labyrinth (1-" + availableLabs.size() + "): ");
+                System.out.print("Choose a lab (1-" + availableLabs.size() + "): ");
                 int chosenLabIndex = scanner.nextInt();
 
                 if (chosenLabIndex < 1 || chosenLabIndex > availableLabs.size()) {
@@ -48,6 +48,8 @@ public class Main {
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
 
-        System.out.println("Execution time: " + elapsedTime + " ms");
+        double seconds = (double) elapsedTime / 1000.0;
+
+        System.out.println("Execution time: " + seconds + " s");
     }
 }
