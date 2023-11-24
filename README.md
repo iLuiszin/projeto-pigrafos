@@ -12,6 +12,10 @@
 
 ## English
 
+## 🗎 Article
+
+ - [Overleaf Article](https://www.overleaf.com/read/zndcmyykfttq#d9dfd0)
+
 ## Project Status
 
 ![Success Badge](https://img.shields.io/badge/State-Success-brightgreen?style=for-the-badge)
@@ -53,7 +57,7 @@ To run the project locally, follow these steps:
 
 ## 👨‍💻 Authors
 
-[<img src="https://avatars.githubusercontent.com/u/79981019?v=4" width=115><br><sub>Luís Felipe</sub>](https://github.com/iLuiszin) | [<img src="https://avatars.githubusercontent.com/u/70274921?s=400&u=c1688d6fcd13223bfe1093c6d16b3b6b646545fe&v=4" width=115><br><sub>Guilherme Queiroz</sub>](https://github.com/Gui1111RIbeiro) | [<img src="https://avatars.githubusercontent.com/u/61810059?v=4" width=115><br><sub>Arthur Rocha</sub>](https://github.com/ArthurRoch)
+[<img src="https://avatars.githubusercontent.com/u/79981019?v=4" width=115><br><sub>Luís Felipe</sub>](https://github.com/iLuiszin) | [<img src="https://avatars.githubusercontent.com/u/70274921?s=400&u=c1688d6fcd13223bfe1093c6d16b3b6b646545fe&v=4" width=115><br><sub>Guilherme Queiroz</sub>](https://github.com/GuiQueirozRibeiro) | [<img src="https://avatars.githubusercontent.com/u/61810059?v=4" width=115><br><sub>Arthur Rocha</sub>](https://github.com/ArthurRoch)
 | :---: | :---: | :---: |
 
 ## Learning Resources
@@ -67,6 +71,10 @@ Feel free to reach out if you have any questions or suggestions!
 
 
 ## Português
+
+## 🗎 Artigo
+
+ - [Artigo Overleaf](https://www.overleaf.com/read/zndcmyykfttq#d9dfd0)
 
 ## Status do Projeto
 
@@ -109,7 +117,7 @@ Para executar o projeto localmente, siga estas etapas:
 
 ## 👨‍💻 Autores
 
-[<img src="https://avatars.githubusercontent.com/u/79981019?v=4" width=115><br><sub>Luís Felipe</sub>](https://github.com/iLuiszin) | [<img src="https://avatars.githubusercontent.com/u/70274921?s=400&u=c1688d6fcd13223bfe1093c6d16b3b6b646545fe&v=4" width=115><br><sub>Guilherme Queiroz</sub>](https://github.com/Gui1111RIbeiro) | [<img src="https://avatars.githubusercontent.com/u/61810059?v=4" width=115><br><sub>Arthur Rocha</sub>](https://github.com/ArthurRoch)
+[<img src="https://avatars.githubusercontent.com/u/79981019?v=4" width=115><br><sub>Luís Felipe</sub>](https://github.com/iLuiszin) | [<img src="https://avatars.githubusercontent.com/u/70274921?s=400&u=c1688d6fcd13223bfe1093c6d16b3b6b646545fe&v=4" width=115><br><sub>Guilherme Queiroz</sub>](https://github.com/GuiQueirozRibeiro) | [<img src="https://avatars.githubusercontent.com/u/61810059?v=4" width=115><br><sub>Arthur Rocha</sub>](https://github.com/ArthurRoch)
 | :---: | :---: | :---: |
 
 ## Recursos de Aprendizado
