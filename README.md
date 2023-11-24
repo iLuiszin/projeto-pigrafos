@@ -5,7 +5,6 @@
 [Português](#português)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/iLuiszin/projeto-pigrafos?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/iLuiszin/projeto-pigrafos?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/iLuiszin/projeto-pigrafos?style=for-the-badge)
 
 <img src="assets/maze.png"/>
