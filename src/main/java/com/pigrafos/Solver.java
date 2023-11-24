@@ -79,6 +79,7 @@ public class Solver {
 
         while (!queue.isEmpty()) {
             int current = queue.poll();
+            if (current == destination) break;
 
             for (int neighbor : graph.getNeighbors(current)) {
                 if (distance.get(neighbor) == Integer.MAX_VALUE) {
